@@ -5,7 +5,19 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    std::cout << "=====================================\n";
+    std::cout << "=          Guess Number!            =\n";
+    std::cout << "=====================================\n";
+    std::cout << "=          1 - Zagraj w gre         =\n";
+    std::cout << "=          2 - Sprawdz TOP5         =\n";
+    std::cout << "=          3 - Zamknij              =\n";
+    std::cout << "=====================================\n\n\n\n";
+
+
+
+    std::cout << "Wybierz numer, aby kontynuowac: ";
+    std::cin.get();
+    return 0;
 }
 
 // Uruchomienie programu: Ctrl + F5 lub menu Debugowanie > Uruchom bez debugowania
