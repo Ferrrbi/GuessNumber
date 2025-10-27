@@ -10,6 +10,9 @@ void test() {
 
 int main()
 {
+    int opcja;
+
+
     std::cout << "=====================================\n";
     std::cout << "=          Guess Number!            =\n";
     std::cout << "=====================================\n";
@@ -21,7 +24,21 @@ int main()
 
 
     std::cout << "Wybierz numer, aby kontynuowac: ";
-    std::cin.get();
+    std::cin >> opcja;
+
+    switch (opcja) {
+    case 1:
+        test();           // wywołanie funkcji wewnątrz case
+        break;
+    case 2:
+        test();        
+        break;
+    case 3:
+        test();        
+        break;
+    default:
+        std::cout << "Nieznana opcja.";
+    }
     return 0;
 }
 
