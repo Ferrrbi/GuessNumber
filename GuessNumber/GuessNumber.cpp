@@ -14,7 +14,6 @@ struct Gracz {
     int proby;
 };
 
-int opcja;
 
 int poziom_trudnosci() {
     int poziom;
