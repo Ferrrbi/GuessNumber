@@ -1,7 +1,4 @@
-﻿// GuessNumber.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
-//
-
-#include <iostream>
+﻿#include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
@@ -47,7 +44,7 @@ int poziom_trudnosci() {
 void zapiszWynik(const std::string & imie, int proby) {
     std::ofstream plik("top5.txt", std::ios::app); // dopisuje na końcu
     if (plik.is_open()) {
-        plik << imie << " " << proby;
+        plik << imie << " " << proby << "\n";
         plik.close();
     }
     else {
@@ -59,6 +56,7 @@ void wyswietlTop5() {
     std::ifstream plik("top5.txt");
     std::vector<Gracz> gracze;
 
+   
     if (plik.is_open()) {
         Gracz g;
         while (plik >> g.imie >> g.proby) {
@@ -76,7 +74,10 @@ void wyswietlTop5() {
         return;
     }
 
-    // Sortowanie po liczbie prób (rosnąco)
+    //Sortowanie wynikow rosnaco
+    std::sort(gracze.begin(), gracze.end(), [](const Gracz& a, const Gracz& b) {
+        return a.proby < b.proby;
+        });
  
 
     std::cout << "\n=== TOP 5 GRACZY ===\n";
