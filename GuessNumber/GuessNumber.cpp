@@ -9,6 +9,7 @@
 struct Gracz {
     std::string imie;
     int proby;
+    std::string poziom;
 };
 
 
@@ -20,16 +21,8 @@ void clearScreen() {
 #endif
 }
 
-bool isNumber(const std::string& s) {
-if (s.empty()) return false;
-for (char c : s) {
-    if (!isdigit(c)) return false;
-}
-return true;
-}
 
-
-int poziom_trudnosci() {
+int poziom_trudnosci(std::string & poziom_nazwa) {
     int poziom;
     int zakres;
 
@@ -44,24 +37,27 @@ int poziom_trudnosci() {
     case 1:
         zakres = 50;
         std::cout << "Wybrano poziom LATWY.\n";
+        poziom_nazwa = "Latwy";
         break;
     case 2:
         zakres = 100;
         std::cout << "Wybrano poziom SREDNI.\n";
+        poziom_nazwa = "Sredni";
         break;
     case 3:
         zakres = 250;
         std::cout << "Wybrano poziom TRUDNY.\n";
+        poziom_nazwa = "Trudny";
         break;
     }
 
     return zakres;
 }
 
-void zapiszWynik(const std::string & imie, int proby) {
-    std::ofstream plik("top5.txt", std::ios::app); // dopisuje na końcu
+void zapiszWynik(const std::string & imie, int proby, const std::string & poziom) {
+    std::ofstream plik("top5.txt", std::ios::app); 
     if (plik.is_open()) {
-        plik << imie << " " << proby << "\n";
+        plik << imie << " " << proby << " " << poziom << "\n";
         plik.close();
     }
     else {
@@ -76,7 +72,7 @@ void wyswietlTop5() {
    
     if (plik.is_open()) {
         Gracz g;
-        while (plik >> g.imie >> g.proby) {
+        while (plik >> g.imie >> g.proby >> g.poziom) {
             gracze.push_back(g);
         }
         plik.close();
@@ -99,7 +95,7 @@ void wyswietlTop5() {
 
     std::cout << "\n=== TOP 5 GRACZY ===\n";
     for (size_t i = 0; i < gracze.size() && i < 5; ++i) {
-        std::cout << i + 1 << ". " << gracze[i].imie << " - " << gracze[i].proby << " prob\n";
+        std::cout << i + 1 << ". " << gracze[i].imie << " - " << gracze[i].proby << " prob" << " | " << gracze[i].poziom << "\n";
     }
     std::cout << "=====================\n\n";
 
@@ -111,7 +107,8 @@ void wyswietlTop5() {
 
 
 void gra() {
-    int zakres = poziom_trudnosci();  // funkcja zwraca zakres
+    std::string poziom;
+    int zakres = poziom_trudnosci(poziom);  // funkcja zwraca zakres
     int wylosowana = rand() % zakres + 1;
     int strzal, proby = 0;
 
@@ -136,7 +133,7 @@ void gra() {
     std::cout << "Podaj swoje imie, aby zapisac wynik: ";
     std::cin >> imie;
 
-    zapiszWynik(imie, proby);
+    zapiszWynik(imie, proby, poziom);
     std::cout << "Wynik zapisany!\n";
 
     std::cout << "\nNacisnij ENTER, aby wrocic do menu...";
@@ -152,8 +149,8 @@ void gra() {
 int main() {
     srand(static_cast<unsigned int>(time(0)));
     int opcja;
-    bool top5_exist = false;
-    std::string wyborString;
+    bool top5_exist = std::ifstream("top5.txt").good();
+    
 
 
 
@@ -165,7 +162,7 @@ int main() {
     std::cout << "=====================================\n";
     std::cout << "=          1 - Zagraj w gre         =\n";
 
-    if (top5_exist) {
+    if (std::ifstream("top5.txt").good()) {
         std::cout << "=          2 - Sprawdz TOP5         =\n";
     }
     std::cout << "=          3 - Zamknij              =\n";
@@ -173,17 +170,6 @@ int main() {
 
     std::cout << "Wybierz numer, aby kontynuowac: ";
     std::cin >> opcja;
-
-
-    if (!isNumber(wyborString)) {
-        std::cout << "Dozwolone sa tylko cyfry!\n";
-        std::cout << "Nacisnij ENTER...";
-        std::cin.ignore();
-        std::cin.get();
-        continue; // wróć do menu
-    }
-
-        opcja = std::stoi(wyborString);
 
 
     switch (opcja) {
@@ -197,7 +183,7 @@ int main() {
 
     case 2:
 
-        if (!top5_exist) {
+        if (!std::ifstream("top5.txt").good()) {
             clearScreen();
             std::cout << "Opcja TOP5 jest jeszcze zablokowana!\n";
             std::cin.ignore();
