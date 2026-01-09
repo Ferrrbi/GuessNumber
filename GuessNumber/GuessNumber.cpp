@@ -149,7 +149,7 @@ void gra() {
 int main() {
     srand(static_cast<unsigned int>(time(0)));
     int opcja;
-    bool top5_exist = std::ifstream("top5.txt").good();
+    //bool top5_exist = std::ifstream("top5.txt").good();
     
 
 
@@ -177,7 +177,6 @@ int main() {
 
         clearScreen();
         gra();
-        top5_exist = true;
         break;
     }
 
