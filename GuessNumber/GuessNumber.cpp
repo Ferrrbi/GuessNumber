@@ -12,6 +12,23 @@ struct Gracz {
 };
 
 
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+bool isNumber(const std::string& s) {
+if (s.empty()) return false;
+for (char c : s) {
+    if (!isdigit(c)) return false;
+}
+return true;
+}
+
+
 int poziom_trudnosci() {
     int poziom;
     int zakres;
@@ -89,6 +106,7 @@ void wyswietlTop5() {
     std::cout << "\nNacisnij ENTER, aby wrocic do menu...";
     std::cin.ignore();
     std::cin.get();
+    clearScreen();
 }
 
 
@@ -97,7 +115,7 @@ void gra() {
     int wylosowana = rand() % zakres + 1;
     int strzal, proby = 0;
 
-    std::cout << "Zgadnij liczbe od 1 do " << zakres << "\n";
+    std::cout << "Zgadnij liczbe od 1 do " << zakres << "\n\n";
 
     do {
         std::cout << "Twoj strzal: ";
@@ -105,12 +123,12 @@ void gra() {
         proby++;
 
         if (strzal > wylosowana)
-            std::cout << "Za duza liczba! Proba nr: " << proby << "\n";
+            std::cout << "Za duza liczba! Proba nr: " << proby << "\n\n";
         else if (strzal < wylosowana)
-            std::cout << "Za mala liczba! Proba nr: " << proby << "\n";
+            std::cout << "Za mala liczba! Proba nr: " << proby << "\n\n";
         else
             std::cout << "Zgadles liczbe " << wylosowana
-            << " w: " << proby << " probach!\n";
+            << " w: " << proby << " probach!\n\n";
     } while (strzal != wylosowana);
 
     // Po wygranej zapisz wynik
@@ -124,21 +142,32 @@ void gra() {
     std::cout << "\nNacisnij ENTER, aby wrocic do menu...";
     std::cin.ignore();
     std::cin.get();
+    clearScreen();
 }
+
+
 
 
 
 int main() {
     srand(static_cast<unsigned int>(time(0)));
-
     int opcja;
+    bool top5_exist = false;
+    std::string wyborString;
+
+
+
     do{
+        clearScreen();
 
     std::cout << "=====================================\n";
     std::cout << "=          Guess Number!            =\n";
     std::cout << "=====================================\n";
     std::cout << "=          1 - Zagraj w gre         =\n";
-    std::cout << "=          2 - Sprawdz TOP5         =\n";
+
+    if (top5_exist) {
+        std::cout << "=          2 - Sprawdz TOP5         =\n";
+    }
     std::cout << "=          3 - Zamknij              =\n";
     std::cout << "=====================================\n\n";
 
@@ -146,24 +175,50 @@ int main() {
     std::cin >> opcja;
 
 
+    if (!isNumber(wyborString)) {
+        std::cout << "Dozwolone sa tylko cyfry!\n";
+        std::cout << "Nacisnij ENTER...";
+        std::cin.ignore();
+        std::cin.get();
+        continue; // wróć do menu
+    }
+
+        opcja = std::stoi(wyborString);
+
+
     switch (opcja) {
     case 1: {
 
+        clearScreen();
         gra();
+        top5_exist = true;
         break;
     }
 
     case 2:
 
+        if (!top5_exist) {
+            clearScreen();
+            std::cout << "Opcja TOP5 jest jeszcze zablokowana!\n";
+            std::cin.ignore();
+            std::cin.get();
+            break;
+        }
+        clearScreen();
         wyswietlTop5();
         break;
 
     case 3:
+        clearScreen();
         std::cout << "Koniec gry. \n";
         break;
 
-    default:
-        std::cout << "Nieznana opcja.\n";
+        default:
+            clearScreen();
+            std::cout << "Nieznana opcja.\n";
+            std::cout << "Nacisnij ENTER...";
+            std::cin.ignore();
+            std::cin.get();
     }
 } while (opcja != 3);
 
