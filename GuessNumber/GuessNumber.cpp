@@ -21,6 +21,14 @@ void clearScreen() {
 #endif
 }
 
+bool czyLiczba(int& x) {
+    if (!(std::cin >> x)) {
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+        return false;
+    }
+    return true;
+}
 
 int poziom_trudnosci(std::string & poziom_nazwa) {
     int poziom;
@@ -31,7 +39,9 @@ int poziom_trudnosci(std::string & poziom_nazwa) {
     std::cout << "2. Sredni (1 do 100)\n";
     std::cout << "3. Trudny (1 do 250)\n";
     std::cout << "Twoj wybor: ";
-    std::cin >> poziom;
+    while (!czyLiczba(poziom)) {
+        std::cout << "Twoj wybor: ";
+    }
 
     switch (poziom) {
     case 1:
@@ -116,7 +126,9 @@ void gra() {
 
     do {
         std::cout << "Twoj strzal: ";
-        std::cin >> strzal;
+        while (!czyLiczba(strzal)) {
+            std::cout << "Twoj strzal: ";
+        }
         proby++;
 
         if (strzal > wylosowana)
@@ -167,9 +179,12 @@ int main() {
     }
     std::cout << "=          3 - Zamknij              =\n";
     std::cout << "=====================================\n\n";
-
     std::cout << "Wybierz numer, aby kontynuowac: ";
-    std::cin >> opcja;
+    
+
+    while (!czyLiczba(opcja)) {
+        std::cout << "Wybierz numer, aby kontynuowac: ";
+    }
 
 
     switch (opcja) {
