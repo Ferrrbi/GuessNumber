@@ -6,13 +6,14 @@
 #include <algorithm>
 #include <string>
 
+// Struktura przechowująca dane gracza
 struct Gracz {
     std::string imie;
     int proby;
     std::string poziom;
 };
 
-
+//Funkcja czyszcząca ekran konsoli Windows i Linux
 void clearScreen() {
 #ifdef _WIN32
     system("cls");
@@ -21,6 +22,7 @@ void clearScreen() {
 #endif
 }
 
+//Funkcja sprawdzająca, czy użytkownik wpisał liczbę
 bool czyLiczba(int& x) {
     if (!(std::cin >> x)) {
         std::cin.clear();
@@ -30,6 +32,7 @@ bool czyLiczba(int& x) {
     return true;
 }
 
+//Funkcja wyboru poziomu trudności
 int poziom_trudnosci(std::string & poziom_nazwa) {
     int poziom;
     int zakres;
@@ -64,6 +67,7 @@ int poziom_trudnosci(std::string & poziom_nazwa) {
     return zakres;
 }
 
+//Funkcja zapisująca wynik gracza do pliku top5.txt na koniec
 void zapiszWynik(const std::string & imie, int proby, const std::string & poziom) {
     std::ofstream plik("top5.txt", std::ios::app); 
     if (plik.is_open()) {
@@ -75,11 +79,11 @@ void zapiszWynik(const std::string & imie, int proby, const std::string & poziom
     }
 }
 
+// Funkcja wyświetlająca ranking TOP5, max 5 wyników posortowanych rosnąco
 void wyswietlTop5() {
     std::ifstream plik("top5.txt");
     std::vector<Gracz> gracze;
 
-   
     if (plik.is_open()) {
         Gracz g;
         while (plik >> g.imie >> g.proby >> g.poziom) {
@@ -118,8 +122,8 @@ void wyswietlTop5() {
 
 void gra() {
     std::string poziom;
-    int zakres = poziom_trudnosci(poziom);  // funkcja zwraca zakres
-    int wylosowana = rand() % zakres + 1;
+    int zakres = poziom_trudnosci(poziom);  
+    int wylosowana = rand() % zakres + 1;                 //+1 żeby było od 1 a nie od 0
     int strzal, proby = 0;
 
     std::cout << "Zgadnij liczbe od 1 do " << zakres << "\n\n";
@@ -159,13 +163,9 @@ void gra() {
 
 
 int main() {
-    srand(static_cast<unsigned int>(time(0)));
+    srand(static_cast<unsigned int>(time(0)));                    // Na podstawie czasu za każdym razem "losuje" inną liczbę
     int opcja;
     
-    
-
-
-
     do{
         clearScreen();
 
@@ -174,7 +174,7 @@ int main() {
     std::cout << "=====================================\n";
     std::cout << "=          1 - Zagraj w gre         =\n";
 
-    if (std::ifstream("top5.txt").good()) {
+    if (std::ifstream("top5.txt").good()) {                       // Opcja TOP5 widoczna tylko jeśli plik istnieje
         std::cout << "=          2 - Sprawdz TOP5         =\n";
     }
     std::cout << "=          3 - Zamknij              =\n";
