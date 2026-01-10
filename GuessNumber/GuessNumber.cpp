@@ -129,9 +129,9 @@ void gra() {
     std::cout << "Zgadnij liczbe od 1 do " << zakres << "\n\n";
 
     do {
-        std::cout << "Twoj strzal: ";
+        std::cout << "Proba nr: " << proby + 1 << " Twoj strzal: ";
         while (!czyLiczba(strzal)) {
-            std::cout << "Twoj strzal: ";
+            std::cout << "Proba nr: " << proby + 1 << " Twoj strzal: ";
         }
         proby++;
 
